@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui" >
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <p:tabView>
+            <p:tab title="Form">
+                <h:form>
+                    <p:spinner id="num1" min="0" max="42" value="#{managedBean.num1}" />
+                    +
+                    <p:spinner id="num2" min="0" max="42" value="#{managedBean.num2}" /> 
+                    <p:commandButton value="Calculate" update="sum_result current_date op_desc"
+                                     action="#{managedBean.sum()}" ajax="true"
+                                     style="margin-left: 10px;" />
+                    =
+                    <h:outputText id="sum_result" value="#{managedBean.num_sum}" />
+                    <br />
+                    <h:outputText id="current_date" value="#{managedBean.curr_date()}" />
+                    <br />
+                    <p:growl id="op_desc" for="op_done" />
+                </h:form>
+                
+            </p:tab>
+            <p:tab title="Table">
+                <p:dataTable var="student" allowUnsorting="true" value="#{managedBean.students}"
+                             rows="2" paginator="true">
+                    <p:column headerText="First name">
+                        <h:outputText value="#{student.frs_name}" />
+                    </p:column>
+                    <p:column sortBy="#{student.sur_name}" headerText="Second name">
+                        <h:outputText value="#{student.sur_name}" />
+                    </p:column>
+                    <p:column sortBy="#{student.mean}" headerText="Mean score">
+                        <h:outputText value="#{student.mean}" />
+                    </p:column>
+                </p:dataTable>
+            </p:tab>
+            <p:tab title="Chart">
+                <!--<p:lineChart model="#{managedBean.lineModel}" />-->
+                <p:chart type="line" model="#{managedBean.lineModel}" widgetVar="cosChart" />
+                <p:commandButton value="Reset" onclick="PF('cosChart').resetZoom()()" />
+            </p:tab>
+        </p:tabView>
+        
+    </h:body>
+</html>
+

@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+    </script>
+    <script type="text/javascript">
+        function calcWithJS() {
+            var x = document.getElementById("x").value;
+            var y = document.getElementById("y").value;
+            xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = calcResultsJS;
+            xhr.open("GET", "/math?x=" + x + "&y=" + y);
+            xhr.responseType = 'json';
+            xhr.setRequestHeader("Accept", "application/json");
+            
+            xhr.send(null);
+        }
+        function calcResultsJS() {
+            sumEl = document.getElementById("sum");
+            differenceEl = document.getElementById("difference");
+            productEl = document.getElementById("product");
+            quotientEl = document.getElementById("quotient");
+            if (this.readyState == 4 && this.status == 200) {
+                sumEl.innerHTML = this.response.sum;
+                differenceEl.innerHTML = this.response.difference;
+                productEl.innerHTML = this.response.product;
+                quotientEl.innerHTML = this.response.quotient;
+            }
+
+        }
+        
+    </script>
+</head>
+<body>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#calc").click(function () {
+                var x = $('#x').val();
+                var y = $("#y").val();
+                $.ajax({
+                    type: "GET",
+                    data: {
+                        "x": x,
+                        "y": y
+                    },
+                    dataType: "json",
+                    url: "/math",
+                    success: function (json) {
+                        $("#sum").html(json.sum);
+                        $("#difference").html(json.difference);
+                        $("#product").html(json.product);
+                        $("#quotient").html(json.quotient);
+                    }
+                });
+            });
+        });
+    </script>
+    <div>
+        <h1>Calculations</h1>
+        <form>
+            x = <input type="text" id="x" />
+            y = <input type="text" id="y" />
+            <input type="button" id="calc" value="Call API (jQuery)" />
+            <input type="button" id="calcJS" value="Call API (vanilla JS)"
+                   onclick="calcWithJS()" />
+        </form>
+        x + y = <span id="sum"></span><br />
+        x - y = <span id="difference"></span><br />
+        x * y = <span id="product"></span><br />
+        x / y = <span id="quotient"></span><br />
+    </div>
+</body>
+</html>
